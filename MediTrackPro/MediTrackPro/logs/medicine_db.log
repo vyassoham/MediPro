@@ -1,8 +1,0 @@
-2025-09-18 18:19:06,653 - SmartMedicineDB_1836422555520 - INFO - __init__:1206 - MedicineDatabase initialized with backward compatibility
-2025-09-18 18:19:06,656 - SmartMedicineDB_1836422555520 - INFO - initialize_database:245 - Initializing Smart Medicine Database...
-2025-09-18 18:19:06,700 - SmartMedicineDB_1836422555520 - ERROR - get_connection:203 - Database connection error: no such column: therapeutic_class
-2025-09-18 18:19:06,701 - SmartMedicineDB_1836422555520 - ERROR - initialize_database:454 - Database initialization failed: Connection failed: no such column: therapeutic_class
-2025-09-18 18:19:18,106 - SmartMedicineDB_1496985654608 - INFO - __init__:1206 - MedicineDatabase initialized with backward compatibility
-2025-09-18 18:19:18,125 - SmartMedicineDB_1496985654608 - INFO - initialize_database:245 - Initializing Smart Medicine Database...
-2025-09-18 18:19:18,135 - SmartMedicineDB_1496985654608 - ERROR - get_connection:203 - Database connection error: no such column: therapeutic_class
-2025-09-18 18:19:18,136 - SmartMedicineDB_1496985654608 - ERROR - initialize_database:454 - Database initialization failed: Connection failed: no such column: therapeutic_class

@@ -1,0 +1,25 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Database files
+medicine_tracker.db
+medicine_tracker.db-shm
+medicine_tracker.db-wal
+
+# Application runtime folders
+uploads/
+logs/
+exports/
+
+# IDE files
+.vscode/
+.idea/
+.DS_Store
