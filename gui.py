@@ -445,7 +445,10 @@ class MedicineTrackerGUI:
                 self.search_entry.insert(0, best_match)
                 self._search_medicine()
             else:
-                self.ocr_text.insert(tk.END, "No medicines recognized. Try manual search.")
+                if not self.ocr_processor.is_tesseract_available():
+                    self.ocr_text.insert(tk.END, "⚠️ Note: Tesseract OCR was not found on your system PATH.\nPlease install Tesseract OCR to enable automatic medicine packaging text extraction, or use manual search below.")
+                else:
+                    self.ocr_text.insert(tk.END, "No medicines recognized. Try manual search.")
         else:
             error_msg = results.get('error', 'Unknown error')
             self.ocr_text.insert(tk.END, f"Processing failed: {error_msg}")

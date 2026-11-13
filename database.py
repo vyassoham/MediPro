@@ -411,12 +411,16 @@ class MedicineDatabase:
             return False
         
         try:
+            if isinstance(scheduled_time, (datetime.datetime, datetime.date)):
+                scheduled_time = scheduled_time.isoformat()
+            taken_at = datetime.datetime.now().isoformat()
+            
             cursor = self.connection.cursor()
             cursor.execute('''
                 INSERT INTO medicine_logs 
                 (user_medicine_id, taken_at, scheduled_time, status, notes)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (user_medicine_id, datetime.datetime.now(), scheduled_time, status, notes))
+            ''', (user_medicine_id, taken_at, scheduled_time, status, notes))
             
             self.connection.commit()
             return True
@@ -456,7 +460,7 @@ class MedicineDatabase:
         
         try:
             cursor = self.connection.cursor()
-            cutoff_date = datetime.datetime.now() - datetime.timedelta(days=days)
+            cutoff_date = (datetime.datetime.now() - datetime.timedelta(days=days)).isoformat()
             
             cursor.execute('''
                 SELECT ml.*, um.user_dosage, m.name as medicine_name

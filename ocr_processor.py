@@ -9,6 +9,7 @@ import pytesseract
 from PIL import Image, ImageEnhance
 import re
 import os
+import shutil
 from config import (
     TESSERACT_CONFIG, OCR_LANGUAGES, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT,
     PREPROCESSING_GAUSSIAN_BLUR, PREPROCESSING_THRESHOLD, PREPROCESSING_MAX_VALUE
@@ -19,9 +20,34 @@ class OCRProcessor:
     """Handles OCR processing for medicine recognition from images."""
     
     def __init__(self):
-        """Initialize OCR processor with configuration."""
+        """Initialize OCR processor with configuration and binary discovery."""
         self.tesseract_config = TESSERACT_CONFIG
         self.languages = OCR_LANGUAGES
+        self._configure_tesseract_path()
+        
+    def _configure_tesseract_path(self):
+        """Auto-detect and configure Tesseract executable across platforms."""
+        current_cmd = getattr(pytesseract.pytesseract, "tesseract_cmd", "tesseract")
+        if shutil.which(current_cmd) or os.path.isfile(current_cmd):
+            return
+
+        # Check standard Windows paths
+        standard_windows_paths = [
+            r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+            r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+            os.path.expandvars(r"%LOCALAPPDATA%\Programs\Tesseract-OCR\tesseract.exe"),
+            os.path.expandvars(r"%PROGRAMFILES%\Tesseract-OCR\tesseract.exe"),
+        ]
+        for p in standard_windows_paths:
+            if os.path.isfile(p):
+                pytesseract.pytesseract.tesseract_cmd = p
+                return
+
+    @staticmethod
+    def is_tesseract_available() -> bool:
+        """Check if Tesseract OCR binary is installed and executable."""
+        cmd = getattr(pytesseract.pytesseract, "tesseract_cmd", "tesseract")
+        return bool(shutil.which(cmd) or os.path.isfile(cmd))
         
     def preprocess_image(self, image_path):
         """
@@ -126,6 +152,8 @@ class OCRProcessor:
             
         except Exception as e:
             print(f"Text extraction error: {e}")
+            if "tesseract is not installed" in str(e).lower() or not self.is_tesseract_available():
+                print("Tesseract OCR engine is not installed or not in system PATH.")
             return "", 0.0
     
     def _clean_extracted_text(self, text):
